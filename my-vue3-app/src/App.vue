@@ -1,12 +1,24 @@
 <template>
-  <el-container style="padding: 20px">
-    <el-card>
-      <el-button type="primary">Element Plus 按钮</el-button>
-      <MyChart style="margin-top: 16px" />
-    </el-card>
-  </el-container>
+  <DashboardView />
 </template>
 
 <script setup>
-import MyChart from "./components/MyChart.vue";
+import DashboardView from './views/DashboardView.vue'
 </script>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Microsoft YaHei', Arial, sans-serif;
+  background: #f5f7fa;
+}
+
+#app {
+  min-height: 100vh;
+}
+</style>

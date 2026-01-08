@@ -1,0 +1,211 @@
+<template>
+  <div class="section">
+    <div class="section-title">
+      <i class="el-icon-document-checked"></i>
+      <span>分层审核管理</span>
+    </div>
+
+    <div class="charts-grid">
+      <!-- Chart 1: Monthly Completion Rate -->
+      <ChartCard title="分层审核月度完成率">
+        <template #filters>
+          <DepartmentSelect v-model="chart1Dept" :options="deptOptions" />
+        </template>
+        <BaseChart :options="chart1Options" height="300px" />
+      </ChartCard>
+
+      <!-- Chart 2: BU Comparison -->
+      <ChartCard title="分层审核BU对比">
+        <template #filters>
+          <el-select v-model="chart2Month" size="small" style="width: 120px">
+            <el-option
+              v-for="(month, index) in months"
+              :key="index"
+              :label="month"
+              :value="index"
+            />
+          </el-select>
+        </template>
+        <BaseChart :options="chart2Options" height="300px" />
+      </ChartCard>
+
+      <!-- Chart 3: Top Reviewers with Unreviewed Tasks -->
+      <ChartCard title="待审核任务TOP10审核员">
+        <template #filters>
+          <DepartmentSelect v-model="chart3Dept" :options="deptOptions" />
+        </template>
+        <BaseChart :options="chart3Options" height="300px" />
+      </ChartCard>
+
+      <!-- Chart 4: Closing Rate by View -->
+      <ChartCard title="关闭率分析">
+        <template #filters>
+          <ViewToggleButtons
+            v-model="chart4View"
+            :buttons="[
+              { label: '按区域', value: 'region' },
+              { label: '按产线', value: 'line' },
+              { label: '按工序', value: 'process' },
+              { label: '按人员', value: 'person' }
+            ]"
+          />
+          <DepartmentSelect v-model="chart4Dept" :options="deptOptions" />
+        </template>
+        <BaseChart :options="chart4Options" height="300px" />
+      </ChartCard>
+
+      <!-- Chart 5: Closing Duration -->
+      <ChartCard title="平均关闭时长">
+        <template #filters>
+          <DepartmentSelect v-model="chart5Dept" :options="deptOptions" />
+        </template>
+        <BaseChart :options="chart5Options" height="300px" />
+      </ChartCard>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, watch } from 'vue'
+import ChartCard from '@/components/charts/ChartCard.vue'
+import BaseChart from '@/components/charts/BaseChart.vue'
+import DepartmentSelect from '@/components/filters/DepartmentSelect.vue'
+import ViewToggleButtons from '@/components/filters/ViewToggleButtons.vue'
+import { useChartDataStore } from '@/stores/chartData'
+import { useDashboardStore } from '@/stores/dashboard'
+import { useChartOptions } from '@/composables/useChartOptions'
+import { MONTHS, BU_OPTIONS } from '@/data/constants'
+
+const chartDataStore = useChartDataStore()
+const dashboardStore = useDashboardStore()
+const { buildBarOptions, buildLineOptions, buildComboOptions } = useChartOptions()
+
+// Filter states
+const chart1Dept = ref('all')
+const chart2Month = ref(10)
+const chart3Dept = ref('all')
+const chart4View = ref('region')
+const chart4Dept = ref('all')
+const chart5Dept = ref('all')
+
+const months = MONTHS
+const deptOptions = [
+  { value: 'all', label: '所有BU' },
+  ...BU_OPTIONS.filter(bu => bu.value !== 'all')
+]
+
+// Chart 1: Monthly completion rate (line chart)
+const chart1Options = computed(() => {
+  const data = chartDataStore.getLayeredAuditCompletionData(chart1Dept.value)
+  if (!data) return {}
+
+  return buildLineOptions(data, {
+    xAxisData: MONTHS,
+    seriesData: [data.completion_rate],
+    seriesNames: ['完成率(%)'],
+    colors: ['#1890ff'],
+    showLegend: true,
+    yAxisFormatter: '{value}%'
+  })
+})
+
+// Chart 2: BU comparison (combo chart)
+const chart2Options = computed(() => {
+  const buLabels = BU_OPTIONS.filter(bu => bu.value !== 'all').map(bu => bu.label)
+  const sampleData1 = buLabels.map(() => Math.floor(Math.random() * 100))
+  const sampleData2 = buLabels.map(() => Math.floor(Math.random() * 100))
+
+  return buildComboOptions(null, {
+    xAxisData: buLabels,
+    barSeriesData: [sampleData1],
+    lineSeriesData: [sampleData2],
+    barSeriesNames: ['审核数量'],
+    lineSeriesNames: ['完成率(%)'],
+    colors: ['#1890ff', '#52c41a']
+  })
+})
+
+// Chart 3: Top 10 reviewers (bar chart)
+const chart3Options = computed(() => {
+  const data = chartDataStore.getLayeredAuditReviewerData(chart3Dept.value)
+  if (!data) return {}
+
+  return buildBarOptions(data, {
+    xAxisData: data.reviewers || [],
+    seriesData: [data.unreviewed_count || []],
+    seriesNames: ['待审核数量'],
+    colors: ['#faad14']
+  })
+})
+
+// Chart 4: Closing rate by different views (bar chart)
+const chart4Options = computed(() => {
+  const data = chartDataStore.getClosingRateData(chart4Dept.value, chart4View.value)
+  if (!data) return {}
+
+  return buildBarOptions(data, {
+    xAxisData: data.labels || [],
+    seriesData: [data.closing_rate || []],
+    seriesNames: ['关闭率(%)'],
+    colors: ['#52c41a'],
+    yAxisFormatter: '{value}%'
+  })
+})
+
+// Chart 5: Closing duration (bar chart)
+const chart5Options = computed(() => {
+  const data = chartDataStore.getClosingDurationData(chart5Dept.value)
+  if (!data) return {}
+
+  return buildBarOptions(data, {
+    xAxisData: data.categories || [],
+    seriesData: [data.duration || []],
+    seriesNames: ['平均关闭时长(天)'],
+    colors: ['#722ed1']
+  })
+})
+
+// Watch for global filter changes
+watch(() => dashboardStore.selectedBU, (newBU) => {
+  if (newBU !== 'all') {
+    chart1Dept.value = newBU
+    chart3Dept.value = newBU
+    chart4Dept.value = newBU
+    chart5Dept.value = newBU
+  }
+})
+</script>
+
+<style scoped>
+.section {
+  margin-bottom: 32px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  padding-left: 4px;
+}
+
+.section-title i {
+  color: #1890ff;
+  margin-right: 8px;
+  font-size: 24px;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 1200px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
