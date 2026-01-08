@@ -83,6 +83,29 @@
         <BaseChart :options="chart6Options" height="300px" />
       </ChartCard>
     </div>
+
+    <!-- Chart 7: Sub-category Statistics (Full Width) -->
+    <div class="full-width-chart">
+      <ChartCard title="各事业部审核问题小类统计">
+        <template #filters>
+          <el-select v-model="chart7TimePeriod" size="small" style="width: 100px">
+            <el-option label="月度" value="month" />
+            <el-option label="季度" value="quarter" />
+            <el-option label="年度" value="year" />
+          </el-select>
+          <el-select v-model="chart7BU" size="small" style="width: 120px">
+            <el-option label="全部事业部" value="" />
+            <el-option label="事业部A" value="bu_a" />
+            <el-option label="事业部B" value="bu_b" />
+            <el-option label="事业部C" value="bu_c" />
+          </el-select>
+        </template>
+        <CustomerAuditSubcategoryChart
+          :bu="chart7BU"
+          :timePeriod="chart7TimePeriod"
+        />
+      </ChartCard>
+    </div>
   </div>
 </template>
 
@@ -90,6 +113,7 @@
 import { ref, computed, watch } from 'vue'
 import ChartCard from '@/components/charts/ChartCard.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
+import CustomerAuditSubcategoryChart from '@/components/charts/CustomerAuditSubcategoryChart.vue'
 import DepartmentSelect from '@/components/filters/DepartmentSelect.vue'
 import ViewToggleButtons from '@/components/filters/ViewToggleButtons.vue'
 import { useChartDataStore } from '@/stores/chartData'
@@ -110,6 +134,8 @@ const chart5View = ref('process')
 const chart5Dept = ref('all')
 const chart6Dept = ref('all')
 const chart6Month = ref(10)
+const chart7TimePeriod = ref('month')
+const chart7BU = ref('')
 
 const months = MONTHS
 const deptOptions = [
@@ -238,6 +264,10 @@ watch(() => dashboardStore.selectedBU, (newBU) => {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 20px;
+}
+
+.full-width-chart {
+  margin-top: 20px;
 }
 
 @media (max-width: 1200px) {

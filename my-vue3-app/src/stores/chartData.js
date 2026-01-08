@@ -336,6 +336,55 @@ export const useChartDataStore = defineStore("chartData", () => {
     return data.value[dataKey]?.[itemKey] || null;
   }
 
+  // 内部审核方案达成率（体系审核&管理评审组合模块）
+  function getInternalAuditPlanAchievementData(filters = {}) {
+    let dataKey = "internalaudit_plan_achievement_Data";
+    let itemKey = `${filters.timePeriod || "month"}all`;
+
+    // 组合筛选：体系 + 事业部
+    if (filters.system && filters.bu) {
+      itemKey = `${filters.timePeriod || "month"}${filters.system}_${filters.bu}`;
+    } else if (filters.system) {
+      itemKey = `${filters.timePeriod || "month"}${filters.system}`;
+    } else if (filters.bu) {
+      itemKey = `${filters.timePeriod || "month"}${filters.bu}`;
+    }
+
+    const rawData = data.value[dataKey]?.[itemKey];
+    if (!rawData) return null;
+
+    const achievementRate = rawData.planned_count?.map((planned, index) => {
+      return planned > 0
+        ? Math.round((rawData.completed_count[index] / planned) * 100)
+        : 0;
+    });
+
+    return {
+      labels: rawData.labels || [],
+      planned_count: rawData.planned_count || [],
+      completed_count: rawData.completed_count || [],
+      achievement_rate: achievementRate || [],
+    };
+  }
+
+  // 客户审核问题小类统计
+  function getCustomerAuditSubcategoryData(filters = {}) {
+    let dataKey = "customeraudit_subcategory_Data";
+    let itemKey = `${filters.timePeriod || "month"}all`;
+
+    if (filters.bu) {
+      itemKey = `${filters.timePeriod || "month"}${filters.bu}`;
+    }
+
+    const rawData = data.value[dataKey]?.[itemKey];
+    if (!rawData) return null;
+
+    return {
+      labels: rawData.labels || [],
+      subcategories: rawData.subcategories || {},
+    };
+  }
+
   // Watch for global filter changes
   watch(
     () => dashboardStore.selectedBU,
@@ -372,5 +421,7 @@ export const useChartDataStore = defineStore("chartData", () => {
     getManagementReviewPlanAchievementData,
     getManagementReviewImprovementClosureData,
     getManagementReviewImprovementComparisonData,
+    getInternalAuditPlanAchievementData,
+    getCustomerAuditSubcategoryData,
   };
 });

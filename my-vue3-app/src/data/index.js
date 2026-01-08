@@ -5,8 +5,10 @@ import { layeredAuditCompletionData, layeredAuditReviewerData, closingRateData, 
 import { internalAuditorData, certifyAuditorData, witnessAuditorData, promoteAuditorData, auditorTypeData } from './auditorManagement/auditorData.js'
 import { promotionData } from './auditorManagement/promotionData.js'
 import { externalAuditData } from './customerAudit/externalAuditData.js'
+import { customerAuditSubcategoryData } from './customerAudit/subcategoryData.js'
 import { systemAuditPlanAchievementData, systemAuditNonconformityClosureData, systemAuditNonconformityComparisonData } from './systemAudit/systemAuditData.js'
 import { managementReviewPlanAchievementData, managementReviewImprovementClosureData, managementReviewImprovementComparisonData } from './managementReview/managementReviewData.js'
+import { internalAuditPlanAchievementData } from './combinedAudit/internalAuditPlanData.js'
 import { BU_OPTIONS, MONTHS, YEARS, CHART_COLORS } from './constants.js'
 
 // Aggregate all data
@@ -32,6 +34,7 @@ export const allData = {
 
   // Customer Audit
   ...externalAuditData,
+  customeraudit_subcategory_Data: customerAuditSubcategoryData,
 
   // System Audit Management
   systemaudit_plan_achievement_Data: systemAuditPlanAchievementData,
@@ -41,7 +44,10 @@ export const allData = {
   // Management Review
   managementreview_plan_achievement_Data: managementReviewPlanAchievementData,
   managementreview_improvement_closure_Data: managementReviewImprovementClosureData,
-  managementreview_improvement_comparison_Data: managementReviewImprovementComparisonData
+  managementreview_improvement_comparison_Data: managementReviewImprovementComparisonData,
+
+  // Combined Audit (System Audit & Management Review)
+  internalaudit_plan_achievement_Data: internalAuditPlanAchievementData
 }
 
 // Export constants
@@ -63,10 +69,12 @@ export {
   auditorTypeData,
   promotionData,
   externalAuditData,
+  customerAuditSubcategoryData,
   systemAuditPlanAchievementData,
   systemAuditNonconformityClosureData,
   systemAuditNonconformityComparisonData,
   managementReviewPlanAchievementData,
   managementReviewImprovementClosureData,
-  managementReviewImprovementComparisonData
+  managementReviewImprovementComparisonData,
+  internalAuditPlanAchievementData
 }

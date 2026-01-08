@@ -15,6 +15,9 @@
       <!-- Auditor Management Section -->
       <AuditorManagementSection />
 
+      <!-- Combined Audit Section -->
+      <CombinedAuditSection />
+
       <!-- Customer Audit Section -->
       <CustomerAuditSection />
 
@@ -36,6 +39,7 @@ import KpiCards from "@/components/layout/KpiCards.vue";
 import QualityBasicLawSection from "@/components/sections/QualityBasicLawSection.vue";
 import LayeredAuditSection from "@/components/sections/LayeredAuditSection.vue";
 import AuditorManagementSection from "@/components/sections/AuditorManagementSection.vue";
+import CombinedAuditSection from "@/components/sections/CombinedAuditSection.vue";
 import CustomerAuditSection from "@/components/sections/CustomerAuditSection.vue";
 import CustomerIssueSection from "@/components/sections/CustomerIssueSection.vue";
 import SystemAuditSection from "@/components/sections/SystemAuditSection.vue";
