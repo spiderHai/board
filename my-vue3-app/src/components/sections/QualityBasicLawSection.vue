@@ -14,7 +14,7 @@
             :options="deptOptions"
           />
         </template>
-        <BaseChart :options="chart1Options" height="300px" />
+        <BasicLawBarChart :dept="chart1Dept" height="300px" />
       </ChartCard>
 
       <!-- Chart 2: Basic Law by BU -->
@@ -29,7 +29,7 @@
             />
           </el-select>
         </template>
-        <BaseChart :options="chart2Options" height="300px" />
+        <BasicLawBarChart :month="chart2Month" chart-type="bu" height="300px" />
       </ChartCard>
 
       <!-- Chart 3: Rank/Type Distribution -->
@@ -47,7 +47,9 @@
             :options="deptOptions"
           />
         </template>
-        <BaseChart :options="chart3Options" height="300px" />
+        <component :is="chart3View === 'rank' ? BasicLawRankChart : BasicLawTypeChart" 
+                   :dept="chart3Dept" 
+                   height="300px" />
       </ChartCard>
     </div>
   </div>
@@ -63,6 +65,9 @@ import { useChartDataStore } from '@/stores/chartData'
 import { useDashboardStore } from '@/stores/dashboard'
 import { useChartOptions } from '@/composables/useChartOptions'
 import { MONTHS, BU_OPTIONS } from '@/data/constants'
+import BasicLawBarChart from '@/components/charts/BasicLawBarChart.vue'
+import BasicLawRankChart from '@/components/charts/BasicLawRankChart.vue'
+import BasicLawTypeChart from '@/components/charts/BasicLawTypeChart.vue'
 
 const chartDataStore = useChartDataStore()
 const dashboardStore = useDashboardStore()

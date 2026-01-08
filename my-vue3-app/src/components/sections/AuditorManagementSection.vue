@@ -48,6 +48,28 @@
         </template>
         <BaseChart :options="chart3Options" height="300px" />
       </ChartCard>
+
+      <!-- New Chart: Promotion Ratio Analysis -->
+      <ChartCard title="审核员晋级通过率分析">
+        <template #filters>
+          <MultiDimensionFilter
+            v-model="promotionFilters"
+            :dimensions="[
+              { key: 'system', label: '体系', options: systemOptions },
+              { key: 'bu', label: '事业部', options: systemOptions },
+              { key: 'dept', label: '部门', options: deptOptions },
+              { key: 'year', label: '年度', options: yearOptions }
+            ]"
+          />
+        </template>
+        <PromotionRatioChart
+          :system="promotionFilters.system"
+          :bu="promotionFilters.bu"
+          :dept="promotionFilters.dept"
+          :year="promotionFilters.year"
+          height="300px"
+        />
+      </ChartCard>
     </div>
   </div>
 </template>
@@ -58,6 +80,8 @@ import ChartCard from '@/components/charts/ChartCard.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
 import DepartmentSelect from '@/components/filters/DepartmentSelect.vue'
 import ViewToggleButtons from '@/components/filters/ViewToggleButtons.vue'
+import PromotionRatioChart from '@/components/charts/PromotionRatioChart.vue'
+import MultiDimensionFilter from '@/components/filters/MultiDimensionFilter.vue'
 import { useChartDataStore } from '@/stores/chartData'
 import { useDashboardStore } from '@/stores/dashboard'
 import { useChartOptions } from '@/composables/useChartOptions'
@@ -73,14 +97,41 @@ const chart2View = ref('witness')
 const chart3View = ref('person')
 const chart3Dept = ref('all')
 
-const deptOptions = [
-  { value: 'all', label: '所有BU' },
-  ...BU_OPTIONS.filter(bu => bu.value !== 'all')
+// 新增的筛选状态
+const promotionFilters = ref({
+  system: '',
+  bu: '',
+  dept: '',
+  year: null
+})
+
+// 定义体系、事业部、部门选项（简化示例）
+const systemOptions = [
+  { value: '', label: '所有体系' },
+  { value: 'VDA6.3', label: 'VDA6.3' },
+  { value: 'IATF16949', label: 'IATF16949' },
+  { value: 'ISO9001', label: 'ISO9001' }
 ]
+
+const buOptions = [
+  { value: '', label: '所有事业部' },
+  { value: 'BU1', label: 'BU1' },
+  { value: 'BU2', label: 'BU2' },
+  { value: 'BU3', label: 'BU3' }
+]
+
+const deptOptions = [
+  { value: '', label: '所有部门' },
+  { value: '质量部', label: '质量部' },
+  { value: '生产部', label: '生产部' },
+  { value: '研发部', label: '研发部' }
+]
+
+const yearOptions = YEARS.map(year => ({ value: year, label: `${year}年` }))
 
 // Chart 1: Internal/Certify auditor (combo chart)
 const chart1Options = computed(() => {
-  const dataKey = chart1View.value === 'internal' ? 'internalAuditor' : 'certifyAuditor'
+  const dataKey = chart1View.value === 'internal' ? 'internalauditor' : 'Certifyauditor'
   const data = chartDataStore.getAuditorData(dataKey, 'all')
 
   if (!data) return {}
@@ -97,7 +148,7 @@ const chart1Options = computed(() => {
 
 // Chart 2: Witness/Promote auditor (combo chart)
 const chart2Options = computed(() => {
-  const dataKey = chart2View.value === 'witness' ? 'witnessAuditor' : 'promoteAuditor'
+  const dataKey = chart2View.value === 'witness' ? 'witnessauditor' : 'promoteauditor'
   const data = chartDataStore.getAuditorData(dataKey, 'all')
 
   if (!data) return {}

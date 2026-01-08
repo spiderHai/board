@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-src/quality_check_V2.2
+src/quality_check_V2.2.html
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

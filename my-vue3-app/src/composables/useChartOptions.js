@@ -180,6 +180,7 @@ export function useChartOptions() {
     const barSeries = barSeriesData.map((data, index) => ({
       name: barSeriesNames[index] || `系列${index + 1}`,
       type: 'bar',
+      yAxisIndex: 0,
       data,
       itemStyle: {
         color: colors[index] || CHART_COLORS.primary
