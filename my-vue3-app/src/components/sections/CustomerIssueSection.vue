@@ -233,9 +233,7 @@ const handleCurrentChange = (val) => {
 
 // Watch for global filter changes
 watch(() => dashboardStore.selectedBU, (newBU) => {
-  if (newBU !== 'all') {
-    selectedDept.value = newBU
-  }
+  selectedDept.value = newBU
 })
 </script>
 

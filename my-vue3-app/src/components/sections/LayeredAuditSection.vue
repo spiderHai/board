@@ -167,12 +167,10 @@ const chart5Options = computed(() => {
 
 // Watch for global filter changes
 watch(() => dashboardStore.selectedBU, (newBU) => {
-  if (newBU !== 'all') {
-    chart1Dept.value = newBU
-    chart3Dept.value = newBU
-    chart4Dept.value = newBU
-    chart5Dept.value = newBU
-  }
+  chart1Dept.value = newBU
+  chart3Dept.value = newBU
+  chart4Dept.value = newBU
+  chart5Dept.value = newBU
 })
 </script>
 
