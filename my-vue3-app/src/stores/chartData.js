@@ -186,6 +186,156 @@ export const useChartDataStore = defineStore("chartData", () => {
     };
   }
 
+  // 体系审核管理模块
+  function getSystemAuditPlanAchievementData(filters = {}) {
+    let dataKey = "systemaudit_plan_achievement_Data";
+    let itemKey = "monthall";
+
+    if (filters.system && filters.bu) {
+      itemKey = `system_bu_${filters.timePeriod || "month"}all`;
+    } else if (filters.system) {
+      itemKey = `system_${filters.timePeriod || "month"}all`;
+    } else if (filters.bu) {
+      itemKey = `bu_${filters.timePeriod || "month"}all`;
+    }
+
+    const rawData = data.value[dataKey]?.[itemKey];
+    if (!rawData) return null;
+
+    const achievementRate = rawData.planned_count?.map((planned, index) => {
+      return planned > 0
+        ? Math.round((rawData.completed_count[index] / planned) * 100)
+        : 0;
+    });
+
+    return {
+      labels: rawData.labels || [],
+      planned_count: rawData.planned_count || [],
+      completed_count: rawData.completed_count || [],
+      achievement_rate: achievementRate || [],
+    };
+  }
+
+  function getSystemAuditNonconformityClosureData(filters = {}) {
+    let dataKey = "systemaudit_nonconformity_closure_Data";
+    let itemKey = "monthall";
+
+    if (filters.dept) {
+      itemKey = `dept_${filters.timePeriod || "month"}all`;
+    } else if (filters.bu) {
+      itemKey = `bu_${filters.timePeriod || "month"}all`;
+    } else if (filters.system) {
+      itemKey = `system_${filters.timePeriod || "month"}all`;
+    }
+
+    const rawData = data.value[dataKey]?.[itemKey];
+    if (!rawData) return null;
+
+    const closureRate = rawData.total_count?.map((total, index) => {
+      return total > 0
+        ? Math.round((rawData.closed_count[index] / total) * 100)
+        : 0;
+    });
+
+    return {
+      labels: rawData.labels || [],
+      total_count: rawData.total_count || [],
+      closed_count: rawData.closed_count || [],
+      closure_rate: closureRate || [],
+    };
+  }
+
+  function getSystemAuditNonconformityComparisonData(filters = {}) {
+    let dataKey = "systemaudit_nonconformity_comparison_Data";
+    let itemKey = "yearall";
+
+    if (filters.clause) {
+      itemKey = `clause_${filters.year || "year"}all`;
+    } else if (filters.dept) {
+      itemKey = `dept_${filters.year || "year"}all`;
+    } else if (filters.bu) {
+      itemKey = `bu_${filters.year || "year"}all`;
+    } else if (filters.system) {
+      itemKey = `system_${filters.year || "year"}all`;
+    }
+
+    return data.value[dataKey]?.[itemKey] || null;
+  }
+
+  // 管理评审管理模块
+  function getManagementReviewPlanAchievementData(filters = {}) {
+    let dataKey = "managementreview_plan_achievement_Data";
+    let itemKey = "monthall";
+
+    if (filters.system && filters.bu) {
+      itemKey = `system_bu_${filters.timePeriod || "month"}all`;
+    } else if (filters.system) {
+      itemKey = `system_${filters.timePeriod || "month"}all`;
+    } else if (filters.bu) {
+      itemKey = `bu_${filters.timePeriod || "month"}all`;
+    }
+
+    const rawData = data.value[dataKey]?.[itemKey];
+    if (!rawData) return null;
+
+    const achievementRate = rawData.planned_count?.map((planned, index) => {
+      return planned > 0
+        ? Math.round((rawData.completed_count[index] / planned) * 100)
+        : 0;
+    });
+
+    return {
+      labels: rawData.labels || [],
+      planned_count: rawData.planned_count || [],
+      completed_count: rawData.completed_count || [],
+      achievement_rate: achievementRate || [],
+    };
+  }
+
+  function getManagementReviewImprovementClosureData(filters = {}) {
+    let dataKey = "managementreview_improvement_closure_Data";
+    let itemKey = "monthall";
+
+    if (filters.dept) {
+      itemKey = `dept_${filters.timePeriod || "month"}all`;
+    } else if (filters.bu) {
+      itemKey = `bu_${filters.timePeriod || "month"}all`;
+    } else if (filters.system) {
+      itemKey = `system_${filters.timePeriod || "month"}all`;
+    }
+
+    const rawData = data.value[dataKey]?.[itemKey];
+    if (!rawData) return null;
+
+    const ontimeClosureRate = rawData.total_count?.map((total, index) => {
+      return total > 0
+        ? Math.round((rawData.ontime_closed_count[index] / total) * 100)
+        : 0;
+    });
+
+    return {
+      labels: rawData.labels || [],
+      total_count: rawData.total_count || [],
+      ontime_closed_count: rawData.ontime_closed_count || [],
+      ontime_closure_rate: ontimeClosureRate || [],
+    };
+  }
+
+  function getManagementReviewImprovementComparisonData(filters = {}) {
+    let dataKey = "managementreview_improvement_comparison_Data";
+    let itemKey = "yearall";
+
+    if (filters.dept) {
+      itemKey = `dept_${filters.year || "year"}all`;
+    } else if (filters.bu) {
+      itemKey = `bu_${filters.year || "year"}all`;
+    } else if (filters.year) {
+      itemKey = `year_${filters.year || "year"}all`;
+    }
+
+    return data.value[dataKey]?.[itemKey] || null;
+  }
+
   // Watch for global filter changes
   watch(
     () => dashboardStore.selectedBU,
@@ -216,5 +366,11 @@ export const useChartDataStore = defineStore("chartData", () => {
     loadStaticData,
     refreshData,
     getPromotionData,
+    getSystemAuditPlanAchievementData,
+    getSystemAuditNonconformityClosureData,
+    getSystemAuditNonconformityComparisonData,
+    getManagementReviewPlanAchievementData,
+    getManagementReviewImprovementClosureData,
+    getManagementReviewImprovementComparisonData,
   };
 });

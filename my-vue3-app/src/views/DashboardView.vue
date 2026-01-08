@@ -18,6 +18,11 @@
       <!-- Customer Audit Section -->
       <CustomerAuditSection />
 
+      <!-- System Audit Section -->
+      <SystemAuditSection />
+
+      <!-- Management Review Section -->
+      <ManagementReviewSection />
       <!-- Customer Issue Section -->
       <CustomerIssueSection />
     </div>
@@ -25,14 +30,16 @@
 </template>
 
 <script setup>
-import DashboardHeader from '@/components/layout/DashboardHeader.vue'
-import GlobalFilterBar from '@/components/layout/GlobalFilterBar.vue'
-import KpiCards from '@/components/layout/KpiCards.vue'
-import QualityBasicLawSection from '@/components/sections/QualityBasicLawSection.vue'
-import LayeredAuditSection from '@/components/sections/LayeredAuditSection.vue'
-import AuditorManagementSection from '@/components/sections/AuditorManagementSection.vue'
-import CustomerAuditSection from '@/components/sections/CustomerAuditSection.vue'
-import CustomerIssueSection from '@/components/sections/CustomerIssueSection.vue'
+import DashboardHeader from "@/components/layout/DashboardHeader.vue";
+import GlobalFilterBar from "@/components/layout/GlobalFilterBar.vue";
+import KpiCards from "@/components/layout/KpiCards.vue";
+import QualityBasicLawSection from "@/components/sections/QualityBasicLawSection.vue";
+import LayeredAuditSection from "@/components/sections/LayeredAuditSection.vue";
+import AuditorManagementSection from "@/components/sections/AuditorManagementSection.vue";
+import CustomerAuditSection from "@/components/sections/CustomerAuditSection.vue";
+import CustomerIssueSection from "@/components/sections/CustomerIssueSection.vue";
+import SystemAuditSection from "@/components/sections/SystemAuditSection.vue";
+import ManagementReviewSection from "@/components/sections/ManagementReviewSection.vue";
 </script>
 
 <style scoped>

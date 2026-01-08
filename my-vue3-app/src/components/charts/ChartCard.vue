@@ -35,9 +35,6 @@ defineProps({
 }
 
 .chart-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 16px;
   padding-bottom: 12px;
   border-bottom: 1px solid #f0f0f0;
@@ -47,7 +44,7 @@ defineProps({
   font-size: 16px;
   font-weight: 600;
   color: #333;
-  margin: 0;
+  margin: 0 0 12px 0;
   display: flex;
   align-items: center;
 }
@@ -63,8 +60,9 @@ defineProps({
 
 .chart-filters {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .chart-body {

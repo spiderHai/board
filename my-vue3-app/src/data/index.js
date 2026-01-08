@@ -3,8 +3,10 @@ import { basicLawMonthlyData } from './qualityBasicLaw/monthlyData.js'
 import { basicLawRankData, basicLawTypeData } from './qualityBasicLaw/rankData.js'
 import { layeredAuditCompletionData, layeredAuditReviewerData, closingRateData, closingDurationData } from './layeredAudit/completionData.js'
 import { internalAuditorData, certifyAuditorData, witnessAuditorData, promoteAuditorData, auditorTypeData } from './auditorManagement/auditorData.js'
-import { promotionData } from './auditorManagement/promotionData.js'  // 新增的晋级数据
+import { promotionData } from './auditorManagement/promotionData.js'
 import { externalAuditData } from './customerAudit/externalAuditData.js'
+import { systemAuditPlanAchievementData, systemAuditNonconformityClosureData, systemAuditNonconformityComparisonData } from './systemAudit/systemAuditData.js'
+import { managementReviewPlanAchievementData, managementReviewImprovementClosureData, managementReviewImprovementComparisonData } from './managementReview/managementReviewData.js'
 import { BU_OPTIONS, MONTHS, YEARS, CHART_COLORS } from './constants.js'
 
 // Aggregate all data
@@ -26,11 +28,20 @@ export const allData = {
   witnessAuditor_year_Data: witnessAuditorData,
   promoteAuditor_year_Data: promoteAuditorData,
   ...auditorTypeData,
-  // 新增的晋级数据
   ...promotionData,
 
   // Customer Audit
-  ...externalAuditData
+  ...externalAuditData,
+
+  // System Audit Management
+  systemaudit_plan_achievement_Data: systemAuditPlanAchievementData,
+  systemaudit_nonconformity_closure_Data: systemAuditNonconformityClosureData,
+  systemaudit_nonconformity_comparison_Data: systemAuditNonconformityComparisonData,
+
+  // Management Review
+  managementreview_plan_achievement_Data: managementReviewPlanAchievementData,
+  managementreview_improvement_closure_Data: managementReviewImprovementClosureData,
+  managementreview_improvement_comparison_Data: managementReviewImprovementComparisonData
 }
 
 // Export constants
@@ -50,6 +61,12 @@ export {
   witnessAuditorData,
   promoteAuditorData,
   auditorTypeData,
-  promotionData,  // 导出新的晋级数据
-  externalAuditData
+  promotionData,
+  externalAuditData,
+  systemAuditPlanAchievementData,
+  systemAuditNonconformityClosureData,
+  systemAuditNonconformityComparisonData,
+  managementReviewPlanAchievementData,
+  managementReviewImprovementClosureData,
+  managementReviewImprovementComparisonData
 }
